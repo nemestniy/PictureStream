@@ -7,4 +7,8 @@ public class ExampleResponse {
     @SerializedName("urls")
     @Expose
     public Urls urls;
+
+    @SerializedName("color")
+    @Expose
+    public String color;
 }

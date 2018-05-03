@@ -10,7 +10,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nemestniy.admin.picturestream.API.ExampleResponse;
 
@@ -23,8 +22,7 @@ import java.net.URL;
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView image;
-    private boolean isImageFitToScreen = false;
-    private Toast toast;
+    private String color;
 
     public RecyclerViewHolder(final View itemView) {
         super(itemView);
@@ -38,6 +36,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);
                 intent.putExtra("img", bs.toByteArray());
+                intent.putExtra("color", color);
                 v.getContext().startActivity(intent);
             }
         });
@@ -45,15 +44,23 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(ExampleResponse res) {
         new AsyncImage(image).execute(res.urls.small);
+        this.color = res.color;
     }
+
+
 
 
     private static class AsyncImage extends AsyncTask<String, Void, Void> {
         Drawable d;
         ImageView image;
+        String color;
 
         public AsyncImage(ImageView image) {
             this.image = image;
+        }
+
+        public AsyncImage(String color) {
+            this.color = color;
         }
 
         @Override
@@ -69,6 +76,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
                 url = new URL(voids[0]);
                 InputStream content = (InputStream)url.getContent();
                 d = Drawable.createFromStream(content, "src");
+                //color =
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -77,4 +85,5 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
             return null;
         }
     }
+
 }
